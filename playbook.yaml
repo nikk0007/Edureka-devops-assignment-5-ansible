@@ -1,0 +1,8 @@
+- name: setup apache tomcat
+  hosts: all
+  become: yes
+  roles:
+    - role: tomcat
+      message: installing tomcat using role
+ #   - role: maven
+ #     name: installing maven using role

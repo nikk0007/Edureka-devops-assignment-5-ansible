@@ -1,0 +1,7 @@
+---
+# handlers file for tomcat
+  - name: reload systemctl
+    command: sudo systemctl daemon-reload
+
+  - name: start tomcat
+    command: sudo systemctl start tomcat

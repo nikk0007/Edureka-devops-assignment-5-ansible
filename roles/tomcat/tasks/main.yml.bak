@@ -1,0 +1,75 @@
+---
+# tasks file for tomcat
+
+    - name: install apache tomcat - 1
+      become: yes
+      command: apt update
+      
+    - name: install apache tomcat - 2
+      become: yes
+      ansible.builtin.apt:
+         name: default-jdk
+         state: present
+         
+    - name: Ensure group "somegroup" exists
+      ansible.builtin.group:
+        name: tomcat
+        state: present
+
+    - name: Add the user 'johnd' with a specific uid and a primary group of 'admin'
+      ansible.builtin.user:
+        name: tomcat
+        comment: John Doe
+        group: tomcat     
+        shell: /bin/false
+        create_home: yes
+        home: /opt/tomcat        
+      
+    - name: install apache tomcat - 3
+      become: yes
+      command: wget https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.82/bin/apache-tomcat-8.5.82.tar.gz
+         
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path: /opt/tomcat
+        state: directory
+        mode: '0755'     
+    
+    - name: Extract foo.tgz into /var/lib/foo
+      become: yes
+      ansible.builtin.unarchive:
+       remote_src: yes
+       src: /home/ubuntu/apache-tomcat-8.5.31.tar.gz
+       dest: /opt/tomcat
+       extra_opts: [--strip-components=1]
+         
+    - name: Change file ownership, group and permissions
+      ansible.builtin.file:
+        path: /opt/tomcat/
+        owner: tomcat
+        recurse: yes
+         
+    - name: Changing perm 1
+      file: 
+        path: /opt/tomcat/conf 
+        mode: g+r
+        recurse: yes 
+
+    - name: Changing perm 2
+      file: 
+        path: /opt/tomcat/conf
+        mode: g+x
+
+    - name: Changing perm 3
+      file: 
+        path: /opt/tomcat/conf
+        mode: g+r
+        recurse: yes      
+
+         
+         
+    - name: tomcat | Create service file
+      template: src=tomcat.service.j2 dest=/etc/systemd/system/tomcat.service mode=644
+      notify:
+       - reload systemctl  
+       - start tomcat 

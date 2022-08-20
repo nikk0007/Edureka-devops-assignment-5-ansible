@@ -1,0 +1,15 @@
+---
+# tasks file for maven
+
+    - name: install maven
+      become: yes
+      command: "{{ item }}"
+      with_items:
+      - apt install -y python-software-properties
+      - add-apt-repository ppa:webupd8team/java
+      - apt update
+      - apt install default-jdk -y
+      - cd /home/edureka/Downloads/ && wget http://apache.mirror.digitalpacific.com.au/maven/maven-3/3.3.9/binaries/apachemaven-3.3.9-bin.tar.gz
+      - cd /opt/ && sudo tar -xzvf /home/edureka/Downloads/apache-maven-3.3.9-bin.tar.gz
+      - update-alternatives --install /usr/bin/mvn maven /opt/apache-maven3.3.9/bin/mvn 1001
+
